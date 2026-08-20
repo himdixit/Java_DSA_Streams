@@ -4,29 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-class Employee {
-    private String name;
-    private String department;
-    private double salary;
-
-    public Employee(String name, String department, double salary) {
-        this.name = name;
-        this.department = department;
-        this.salary = salary;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public double getSalary() {
-        return salary;
-    }
-}
 public class DepartmentEmployeeCount {
     public static void main(String[] args) {
         List<Employee> employees = List.of(
@@ -38,18 +15,22 @@ public class DepartmentEmployeeCount {
              new Employee("Him", "IT", 90000)
         );
 
-        Map<String, Long> mp = employees.stream()
-            .collect(Collectors.groupingBy(Employee :: getDepartment, Collectors.counting()));
-        
-        mp.entrySet().stream()
-        .filter(entry -> entry.getValue() > 2)
-        .forEach(entry -> System.out.println("Department: " + entry.getKey() + ", Employee Count: " + entry.getValue()));
+        List<String> filtered = employees.stream()
+            .collect(Collectors.groupingBy(Employee :: getDepartment, Collectors.counting()))
+            .entrySet().stream()
+            .filter(entry -> entry.getValue() > 2)
+            .map(Map.Entry :: getKey)
+            .toList();
 
-        List<String> filteredEntries = mp.entrySet().stream()
-        .filter(entry -> entry.getValue() > 2)
-        .map(Map.Entry :: getKey)
-        .toList();
+        // mp.entrySet().stream()
+        // .filter(entry -> entry.getValue() > 2)
+        // .forEach(entry -> System.out.println("Department: " + entry.getKey() + ", Employee Count: " + entry.getValue()));
 
-        System.out.println("Departments with more than 2 employees:"+filteredEntries);
+        // List<String> filteredEntries = mp.entrySet().stream()
+        // .filter(entry -> entry.getValue() > 2)
+        // .map(Map.Entry :: getKey)
+        // .toList();
+
+        System.out.println("Departments with more than 2 employees:"+filtered);
     }
 }
